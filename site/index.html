@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html data-ng-app="chihuahuaApp">
+  <head>
+    <title>Chihuahu Quest</title>
+	
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+    <link rel="stylesheet" type="text/css" href="style/background.css">
+    
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    
+    <script src="/app/chihuahuaApp.js"></script>
+    <script src="/app/animator.js"></script>
+    <script src="/app/mainController.js"></script>
+  
+  </head>
+
+  
+  <body>
+    <div class="main">
+	  <header>
+	  </header>
+	  
+	  <article data-ng-controller="mainController">
+	    <canvas id="animator" width="800" height="400">
+	    </canvas>
+      </article>
+	  
+	  </footer>
+	  </footer>
+	</div>
+  </body>
+
+</html>
