@@ -7,7 +7,7 @@ chihuahuaApp.controller('mainController', [
       animator, 
       hero) {
 
-    animator.animObjects.push(ANIMATED_OBJECTS.BouncingBall);  
+    //animator.animObjects.push(ANIMATED_OBJECTS.BouncingBall);  
     animator.animObjects.push(hero);  
 }]);
 

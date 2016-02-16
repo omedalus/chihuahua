@@ -33,7 +33,45 @@ chihuahuaApp.service('hero', function() {
     drawingContext.save();
     
     // Doggie sprites are too big.
-    drawingContext.scale(1,1);//.25, .25);     
+    drawingContext.scale(.75,.75);//.25, .25);         
+    
+        // Render the far hind leg.
+    var legPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + Math.PI);
+    var legAngle = .3 * legPhase;
+    drawingContext.save();
+    drawingContext.translate(95, 130);
+    drawingContext.rotate(legAngle);
+    drawingContext.translate(-50, -10);
+    drawingContext.drawImage(IMAGES.HINDLEG.image, 0, 0);
+    
+    var pawPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + 1.5 * Math.PI);
+    var pawAngle = .3 * pawPhase;
+    drawingContext.translate(20, 115);    
+    drawingContext.rotate(pawAngle * 2);
+    drawingContext.translate(-15, -10);    
+    drawingContext.drawImage(IMAGES.HINDPAW.image, 0, 0);
+    
+    drawingContext.restore();    
+    
+    // Render the far front leg.
+    legPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time);
+    legAngle = -.3 + .6 * legPhase;
+    drawingContext.save();
+    drawingContext.translate(270, 140);
+    drawingContext.rotate(legAngle);
+    drawingContext.translate(-30, -20);
+    drawingContext.drawImage(IMAGES.FRONTLEG.image, 0, 0);
+    
+    pawPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + .5 * Math.PI);
+    pawAngle = .3 * pawPhase;
+    drawingContext.translate(20, 105);
+    drawingContext.rotate(pawAngle * 2);
+    drawingContext.translate(-15, -10);    
+    drawingContext.drawImage(IMAGES.FRONTPAW.image, 0, 0);
+
+    drawingContext.restore();    
+
+    
     drawingContext.drawImage(IMAGES.TORSO.image, 0, 0);
 
     // Render the head.
@@ -53,15 +91,40 @@ chihuahuaApp.service('hero', function() {
     drawingContext.restore();
     
     // Render the hind leg.
-    var legPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time);
-    var legAngle = .3 * legPhase;
+    legPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time);
+    legAngle = .3 * legPhase;
     drawingContext.save();
     drawingContext.translate(65, 145);
     drawingContext.rotate(legAngle);
     drawingContext.translate(-50, -10);
     drawingContext.drawImage(IMAGES.HINDLEG.image, 0, 0);
+    
+    pawPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + .5 * Math.PI);
+    pawAngle = .3 * pawPhase;
+    drawingContext.translate(20, 115);    
+    drawingContext.rotate(pawAngle * 2);
+    drawingContext.translate(-15, -10);    
+    drawingContext.drawImage(IMAGES.HINDPAW.image, 0, 0);
+    
     drawingContext.restore();    
     
+    // Render the front leg.
+    legPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + Math.PI);
+    legAngle = -.3 + .6 * legPhase;
+    drawingContext.save();
+    drawingContext.translate(300, 155);
+    drawingContext.rotate(legAngle);
+    drawingContext.translate(-30, -20);
+    drawingContext.drawImage(IMAGES.FRONTLEG.image, 0, 0);
+    
+    pawPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + Math.PI * 1.5);
+    pawAngle = .3 * pawPhase;
+    drawingContext.translate(20, 105);
+    drawingContext.rotate(pawAngle * 2);
+    drawingContext.translate(-15, -10);    
+    drawingContext.drawImage(IMAGES.FRONTPAW.image, 0, 0);
+
+    drawingContext.restore();    
     
     
     drawingContext.restore();
