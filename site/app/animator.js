@@ -23,7 +23,7 @@ chihuahuaApp.service('animator', function() {
     
     // Clear the canvas element, and set the default coordinate system.
     canvasElem.width = canvasElem.width;
-    canvas2D.translate(canvasElem.width / 2, canvasElem.height / 2);
+    canvas2D.translate(canvasElem.width / 3, canvasElem.height / 3);
     
     // TODO: Sort anim objects from back to front, by .z property.
     _.each(self.animObjects, function(animObject) {
