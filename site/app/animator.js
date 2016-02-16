@@ -6,14 +6,31 @@ chihuahuaApp.service('animator', function() {
 
   self.fps = 15;
   self.isRunning = false;
+  self.time = 0;
 
+  self.animObjects = [];
+  
+
+  var canvasElem;
   var canvas2D;
 
   var framecount = 0;
   
   self.drawFrame = function() {
-    console.log(framecount);
+    if (!canvasElem || !canvas2D) {
+      return;
+    }
+    
+    // Clear the canvas element.
+    canvasElem.width = canvasElem.width;
+    
+    // TODO: Sort anim objects from back to front, by .z property.
+    _.each(self.animObjects, function(animObject) {
+      animObject.render(canvas2D, self.time);
+    });
+    
     framecount++;
+    self.time += 1.0 / self.fps;
   };
   
   
@@ -42,7 +59,7 @@ chihuahuaApp.service('animator', function() {
 
 
   $(document).ready(function() {
-    var canvasElem = document.getElementById('animator');
+    canvasElem = document.getElementById('animator');
     canvas2D = canvasElem.getContext('2d');
     
     self.isRunning = true;

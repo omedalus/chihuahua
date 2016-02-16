@@ -4,9 +4,33 @@ body {
 }
 
 .main {
-  width: 960px;
+  width: 800px;
   margin: auto;
 }
+
+header {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.chichiquest-logo {
+  background: url('../img/chichihead.png');
+  background-repeat: no-repeat;
+  background-position: center; 
+  display: inline-block;
+  height: 80px;
+  width: 80px;
+}
+
+.chichiquest-title {
+  background: url('../img/chichititle.png');
+  background-repeat: no-repeat;
+  background-position: center; 
+  display: inline-block;
+  height: 80px;
+  width: 600px;
+}
+
 
 article {
   text-align: center;
