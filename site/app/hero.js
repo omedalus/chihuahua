@@ -13,6 +13,9 @@ chihuahuaApp.service('hero', function() {
   var IMAGES = {
     TORSO: {src: 'img/sprites/hero/walking/torso.png'},
     HEAD: {src: 'img/sprites/hero/walking/head.png'},
+    EYEBROW: {src: 'img/sprites/hero/walking/eyebrow.png'},
+    EYE: {src: 'img/sprites/hero/walking/eye.png'},
+    PUPIL: {src: 'img/sprites/hero/walking/pupil.png'},
     TAIL: {src: 'img/sprites/hero/walking/tail.png'},
     HINDLEG: {src: 'img/sprites/hero/walking/hind-leg.png'},
     HINDPAW: {src: 'img/sprites/hero/walking/hind-paw.png'},
@@ -35,7 +38,21 @@ chihuahuaApp.service('hero', function() {
     // Doggie sprites are too big.
     drawingContext.scale(.75,.75);//.25, .25);         
     
-        // Render the far hind leg.
+    
+    // Underneath everything, the shadow.
+    var shadowPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + Math.PI);
+    var shadowXSc = 1 + .1 * shadowPhase;    
+    drawingContext.save();
+    drawingContext.translate(200, 260);
+    drawingContext.scale(shadowXSc, .15);
+    drawingContext.beginPath();
+    drawingContext.arc(0, 0, 200, 0, 2 * Math.PI, false);
+    drawingContext.restore();
+    drawingContext.fillStyle = 'rgba(0,0,0, .5)';
+    drawingContext.fill();
+    
+    
+    // Render the far hind leg.
     var legPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time + Math.PI);
     var legAngle = .3 * legPhase;
     drawingContext.save();
@@ -75,9 +92,30 @@ chihuahuaApp.service('hero', function() {
     drawingContext.drawImage(IMAGES.TORSO.image, 0, 0);
 
     // Render the head.
+    var headPhase = Math.sin(2 * Math.PI * self.animspeed.walkingLegs * time);
+    var headBob = 5 + 5 * headPhase;
+    var headAngle = .05 + .05 * headPhase;
     drawingContext.save();
-    drawingContext.translate(250, -165);
+    drawingContext.translate(250 + headBob, -165 + headBob);
+    drawingContext.rotate(headAngle);
     drawingContext.drawImage(IMAGES.HEAD.image, 0, 0);
+            
+    drawingContext.save();
+    drawingContext.translate(110, 110);
+    drawingContext.drawImage(IMAGES.EYE.image, 0, 0);
+    drawingContext.restore();
+
+    drawingContext.save();
+    drawingContext.translate(120, 115 + .5 * headBob);
+    drawingContext.drawImage(IMAGES.PUPIL.image, 0, 0);
+    drawingContext.restore();    
+    
+    drawingContext.save();
+    drawingContext.translate(100, 100 - .5 * headBob);
+    drawingContext.drawImage(IMAGES.EYEBROW.image, 0, 0);
+    drawingContext.restore();
+
+    
     drawingContext.restore();
 
     // Render the tail.
@@ -125,8 +163,7 @@ chihuahuaApp.service('hero', function() {
     drawingContext.drawImage(IMAGES.FRONTPAW.image, 0, 0);
 
     drawingContext.restore();    
-    
-    
+        
     drawingContext.restore();
   };
   
