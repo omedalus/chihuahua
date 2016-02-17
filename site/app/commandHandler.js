@@ -27,6 +27,15 @@ chihuahuaApp.service('commandHandler', [
           break;
       }
     });
+    
+    $(document).keyup(function(e) {
+      switch(e.keyCode) {
+        case self.KEYCODES.ARROW_LEFT:
+        case self.KEYCODES.ARROW_RIGHT:
+          hero.action = hero.ACTIONS.SITTING;
+          break;
+      }
+    });
   
   }
 ]);

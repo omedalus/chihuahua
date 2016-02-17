@@ -239,12 +239,12 @@ chihuahuaApp.service('hero', [
         
         // Behind everything, the shadow.
         new AnimationHelpers.Limb({
-          parentAnchorPoint: {x: -20, y: 110},
+          parentAnchorPoint: {x: -40, y: 110},
           z: -10,
           customDraw: function(drawingContext, t) {
             drawingContext.scale(1, .15);
             drawingContext.beginPath();
-            drawingContext.arc(0, 0, 200, 0, 2 * Math.PI, false);
+            drawingContext.arc(0, 0, 240, 0, 2 * Math.PI, false);
             drawingContext.fillStyle = 'rgba(0,0,0, .5)';
             drawingContext.fill();
           },
