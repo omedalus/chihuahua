@@ -33,15 +33,57 @@ var AnimationHelpers = {};
     this.angle = config.angle || 0;
     this.z = config.z || 0;
     
-    this.perturb = config.perturb || function(t) { return {}; };
+    this.perturb = config.perturb || null;
   };
+
+  
+  Limb.prototype.unperturb = function() {
+    this.perturb = null;
+    _.each(this.children, function(childLimb) {
+      childLimb.unperturb();
+    });
+    return this;
+  };  
+  
+  
+  Limb.prototype.clone = function() {
+    var self = this;
+    var retval = new Limb({
+      children: [],
+
+      image: self.image,
+      customDraw: self.customDraw,
+
+      parentAnchorPoint: {
+        x: self.parentAnchorPoint.x,
+        y: self.parentAnchorPoint.y
+      },
+      
+      imageAnchorPoint: {
+        x: self.imageAnchorPoint.x,
+        y: self.imageAnchorPoint.y
+      },
+      
+      angle: self.angle,
+      z: self.z,
+      
+      perturb: self.perturb
+    });
+    
+    _.each(self.children, function(childLimb) {
+      retval.children.push(childLimb.clone());
+    });
+    
+    return retval;
+  }
   
   Limb.prototype.render = function(drawingContext, time) {
     var self = this;
     
-    var perturbations = self.perturb(time);
+    var perturbations = !!self.perturb ? self.perturb(time) : {};
     perturbations.parentAnchorPoint = perturbations.parentAnchorPoint || {};
     perturbations.imageAnchorPoint = perturbations.imageAnchorPoint || {};    
+    perturbations.scale = perturbations.scale || {};    
 
     var vars = {
       image: perturbations.image || self.image,
@@ -53,7 +95,12 @@ var AnimationHelpers = {};
         x: self.imageAnchorPoint.x + (perturbations.imageAnchorPoint.x || 0),
         y: self.imageAnchorPoint.y + (perturbations.imageAnchorPoint.y || 0)
       },
-      angle: self.angle + (perturbations.angle || 0)
+      angle: self.angle + (perturbations.angle || 0),
+      scale: {
+        x: 1 + (perturbations.scale.x || 0),
+        y: 1 + (perturbations.scale.y || 0)
+      },
+      
     };
     
     // Sort the children in order from lowest to highest z-index.
@@ -67,6 +114,7 @@ var AnimationHelpers = {};
     drawingContext.translate(vars.parentAnchorPoint.x, vars.parentAnchorPoint.y);
     drawingContext.rotate(vars.angle);
     drawingContext.translate(-vars.imageAnchorPoint.x, -vars.imageAnchorPoint.y);
+    drawingContext.scale(vars.scale.x, vars.scale.y);
     
     var iChild = 0;
     for (; iChild < sortedChildren.length; iChild++) {
