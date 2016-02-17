@@ -2,6 +2,11 @@ chihuahuaApp.service('hero', function() {
 
   var self = this;
   
+  self.gridPosition = {x: 0, y: 0};
+  self.finePosition = {x: 0, y: 0};
+  
+  self.direction = 1;
+  
   // Speeds measured in hertz.
   self.animspeed = {
     tailUp: 5,
@@ -28,6 +33,10 @@ chihuahuaApp.service('hero', function() {
     imgObj.key = imgKey;
     imgObj.image = new Image();
     imgObj.image.src = imgObj.src;
+    
+    // TODO: Register them with a loading service, and add event handlers
+    // to call the loading service to notify it that an object has finished
+    // loading.
   });
   
   
@@ -254,6 +263,8 @@ chihuahuaApp.service('hero', function() {
     // Doggie sprites are too big.
     drawingContext.scale(.25, .25);
 
+    // Face left or right.
+    drawingContext.scale(self.direction, 1);
 
     animWalking.render(drawingContext, time);
     
@@ -262,38 +273,6 @@ chihuahuaApp.service('hero', function() {
     drawingContext.restore();
     return;
     
-    
-
-    // Render the head.
-    var headPhase = AnimationHelpers.computePhasePosition(time, self.animspeed.walkingLegs, 0);
-    var headBob = 5 + 5 * headPhase;
-    var headAngle = .05 + .05 * headPhase;
-    drawingContext.save();
-    drawingContext.translate(250 + headBob, -165 + headBob);
-    drawingContext.rotate(headAngle);
-    drawingContext.drawImage(IMAGES.HEAD.image, 0, 0);
-            
-    drawingContext.save();
-    drawingContext.translate(110, 110);
-    drawingContext.drawImage(IMAGES.EYE.image, 0, 0);
-    drawingContext.restore();
-
-    drawingContext.save();
-    drawingContext.translate(120, 115 + .5 * headBob);
-    drawingContext.drawImage(IMAGES.PUPIL.image, 0, 0);
-    drawingContext.restore();    
-    
-    drawingContext.save();
-    drawingContext.translate(100, 100 - .5 * headBob);
-    drawingContext.drawImage(IMAGES.EYEBROW.image, 0, 0);
-    drawingContext.restore();
-
-    
-    drawingContext.restore();
-
-    drawingContext.restore();    
-        
-    drawingContext.restore();
   };
   
   
