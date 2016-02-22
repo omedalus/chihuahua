@@ -11,6 +11,41 @@ chihuahuaApp.service('hero', [
     
     self.direction = 1;
     
+    var shivers = {
+      rightear: {
+        duration: 2,
+        interval: 5,
+        intervalrand: 3,
+        lastshivertime: 0,
+        shivering: false
+      },
+      leftear: {
+        duration: 2,
+        interval: 5,
+        intervalrand: 3,
+        lastshivertime: 0,
+        shivering: false
+      },
+      eyebrows: {
+        duration: 2,
+        interval: 5,
+        intervalrand: 3,
+        lastshivertime: 0,
+        shivering: false
+      },
+    };
+    
+    var perturbshiverpart = function(partname, magnitude) {
+      return function(t) {
+        if (shivers[partname].shivering) {
+          return {
+            angle: magnitude * (Math.random() - .5)
+          }
+        }
+        return {};
+      };
+    };
+    
     // Speeds measured in hertz.
     self.animspeed = {
       tailUp: 3,
@@ -52,6 +87,24 @@ chihuahuaApp.service('hero', [
     });
     
     
+    var AUDIOS = {
+      WALKINGHARD: {src: 'audio/chewie-footsteps-solid.mp3'}
+    };
+    
+    _.each(AUDIOS, function(audioObj, audioKey) {
+      audioObj.key = audioKey;
+      audioObj.audio = new Audio();
+      audioObj.audio.src = audioObj.src;
+      audioObj.audio.type = 'audio/mpeg';
+      audioObj.audio.loop = true;
+      
+      // TODO: Register them with a loading service, and add event handlers
+      // to call the loading service to notify it that an object has finished
+      // loading.
+    });
+    
+    var currentAudioObj = null;
+    
     
     var animWalking = new AnimationHelpers.Limb({
       children: [
@@ -62,7 +115,7 @@ chihuahuaApp.service('hero', [
           perturb: function(t) {
             return {
               parentAnchorPoint: {
-                y: 5 * AnimationHelpers.computePhasePosition(t, 
+                y: 5 * AnimationHelpers.computePhasePosition(2 * t, 
                     self.animspeed.walkingLegs, 0)
               }
             };
@@ -82,7 +135,7 @@ chihuahuaApp.service('hero', [
             
             new AnimationHelpers.Limb({
               image: IMAGES.COLLAR.image,
-              parentAnchorPoint: {x: 102, y: 28},
+              parentAnchorPoint: {x: 102, y: 23},
               imageAnchorPoint: {x: 0, y: 25},
               z: -5
             }),
@@ -300,25 +353,28 @@ chihuahuaApp.service('hero', [
             // Near front leg.
             new AnimationHelpers.Limb({
               image: IMAGES.FRONTLEGSHOULDER.image,
-              parentAnchorPoint: {x: 95, y: 50},
+              parentAnchorPoint: {x: 95, y: 45},
               imageAnchorPoint: {x: 8, y: 4},
               perturb: function(t) {
                 return {
-                  angle: .3 * 
-                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .25)
+                  angle: .6 * 
+                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5),
                 };
               },
               
               children: [
                 new AnimationHelpers.Limb({
                   image: IMAGES.FRONTLEGLEG.image,
-                  parentAnchorPoint: {x: 7, y: 13},
+                  parentAnchorPoint: {x: 7, y: 11},
                   imageAnchorPoint: {x: 5, y: 3},
-                  angle: -.4,
+                  angle: -.2,
                   perturb: function(t) {
                     return {
-                      angle: -.6 * AnimationHelpers.computePhasePosition(t, 
-                          self.animspeed.walkingLegs, 0)
+                      angle: .6 * AnimationHelpers.computePhasePosition(t, 
+                          self.animspeed.walkingLegs, .25),
+                      parentAnchorPoint: {
+                        y: 2 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5)
+                      }
                     };
                   }
                 })
@@ -328,26 +384,29 @@ chihuahuaApp.service('hero', [
             // Far front leg.
             new AnimationHelpers.Limb({
               image: IMAGES.FRONTLEGSHOULDER.image,
-              parentAnchorPoint: {x: 105, y: 45},
+              parentAnchorPoint: {x: 90, y: 45},
               imageAnchorPoint: {x: 8, y: 4},
               z: -1,
               perturb: function(t) {
                 return {
                   angle: .3 * 
-                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .75)
+                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, 0)
                 };
               },
               
               children: [
                 new AnimationHelpers.Limb({
                   image: IMAGES.FRONTLEGLEG.image,
-                  parentAnchorPoint: {x: 7, y: 13},
+                  parentAnchorPoint: {x: 7, y: 11},
                   imageAnchorPoint: {x: 5, y: 3},
-                  angle: -.4,
+                  angle: -.2,
                   perturb: function(t) {
                     return {
-                      angle: -.6 * AnimationHelpers.computePhasePosition(t, 
-                          self.animspeed.walkingLegs, .5)
+                      angle: .6 * AnimationHelpers.computePhasePosition(t, 
+                          self.animspeed.walkingLegs, -.25),
+                      parentAnchorPoint: {
+                        y: 2 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, 0)
+                      }
                     };
                   }
                 })
@@ -392,11 +451,11 @@ chihuahuaApp.service('hero', [
         self.finePosition.x += 1;        
       }
 
-      
       // Then handle the walking rendering.
+      currentAudioObj = AUDIOS['WALKINGHARD'];
+      
       
       drawingContext.save();
-
       // Position on the grid.
       var screenCoords = grid.gridCoordinatesToPixels(self.gridPosition, self.finePosition);
       drawingContext.translate(screenCoords.x, screenCoords.y);
@@ -410,10 +469,65 @@ chihuahuaApp.service('hero', [
       drawingContext.restore();
       return;
     };
+
     
-    var animSitting = animWalking.clone().unperturb();
+    var animSitting = animWalking.clone();
+    animSitting.children[0].angle = -.6; // Torso up
+    animSitting.children[0].parentAnchorPoint = {x: 0, y: 15}; // Down onto his butt
+    animSitting.children[0].children[2].angle = .1; // Neck forward
+    animSitting.children[0].children[2].parentAnchorPoint = {x: 104, y: 23};
+    animSitting.children[0].children[2].children[0].angle = .5; // Head forward
+    animSitting.children[0].children[2].children[0].parentAnchorPoint= {x: 32, y: 10};
+    // Hind legs up
+    animSitting.children[0].children[3].parentAnchorPoint = {x: 15, y: 40};
+    animSitting.children[0].children[3].angle = -1;
+    animSitting.children[0].children[3].children[0].angle = 1;
+    animSitting.children[0].children[3].children[0].children[0].angle = -.6;
+    animSitting.children[0].children[4].parentAnchorPoint = {x: 25, y: 45};
+    animSitting.children[0].children[4].angle = -1;
+    animSitting.children[0].children[4].children[0].angle = 1;
+    animSitting.children[0].children[4].children[0].children[0].angle = -.6;
+    // Front lefts down
+    animSitting.children[0].children[5].parentAnchorPoint = {x: 80, y: 45};
+    animSitting.children[0].children[5].angle = 1;
+    animSitting.children[0].children[6].parentAnchorPoint = {x: 90, y: 50};
+    animSitting.children[0].children[6].angle = 1;
+    // Stop moving
+    animSitting.children[0].perturb = null;
+    animSitting.children[0].children[2].unperturb();
+    animSitting.children[0].children[3].unperturb();
+    animSitting.children[0].children[4].unperturb();
+    animSitting.children[0].children[5].unperturb();
+    animSitting.children[0].children[6].unperturb();
+    animSitting.children[1].unperturb();
+    // Bob the neck.
+    animSitting.children[0].children[2].perturb = function(t) {
+      return {
+        parentAnchorPoint: {
+          x: 2 * AnimationHelpers.computePhasePosition(0.5 * t, self.animspeed.walkingLegs, .5),
+          y: 1 * AnimationHelpers.computePhasePosition(0.5 * t, self.animspeed.walkingLegs, 0),
+        }
+      }
+    };
+    // Shiver parts.
+    animSitting.children[0].children[2].children[0].children[5].perturb = 
+        perturbshiverpart('rightear', .1);
+    animSitting.children[0].children[2].children[0].children[6].perturb = 
+        perturbshiverpart('leftear', .1);
+    animSitting.children[0].children[2].children[0].children[5].perturb = 
+        perturbshiverpart('rightear', .1);
+    animSitting.children[0].children[2].children[0].children[1].perturb = 
+        perturbshiverpart('eyebrows', .1);
+    animSitting.children[0].children[2].children[0].children[3].perturb = 
+        perturbshiverpart('eyebrows', .1);
+    
+    
+    window.animSitting = animSitting;
+    
     
     var renderSitting = function(drawingContext, time) {
+      currentAudioObj = null;
+    
       drawingContext.save();
 
       // Position on the grid.
@@ -451,6 +565,22 @@ chihuahuaApp.service('hero', [
 
     
     self.render = function(drawingContext, time) {
+      _.each(shivers, function(shiver, shivername) {
+        shiver.shivering = time < shiver.lastshivertime + shiver.duration;
+        if (time > shiver.lastshivertime + shiver.interval) {
+          shiver.lastshivertime = time + shiver.intervalrand * Math.random();
+        }
+      });
+      
+      _.each(AUDIOS, function(audioObj) {
+        if (audioObj !== currentAudioObj) {
+          audioObj.audio.pause();
+        } else {
+          audioObj.audio.play();
+        }
+      });
+    
+    
       self.action.renderFn(drawingContext, time);
     };  
   }
