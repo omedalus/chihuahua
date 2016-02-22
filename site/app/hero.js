@@ -13,8 +13,8 @@ chihuahuaApp.service('hero', [
     
     // Speeds measured in hertz.
     self.animspeed = {
-      tailUp: 4,
-      walkingLegs: 2,
+      tailUp: 3,
+      walkingLegs: 1.5,
     };
 
     // Define and load all images!
@@ -34,14 +34,11 @@ chihuahuaApp.service('hero', [
       RIGHTPUPIL: {src: 'img/sprites/hero/walking/RightPupil.png'},
       RIGHTEYEBROW: {src: 'img/sprites/hero/walking/RightEyebrow.png'},
       WART: {src: 'img/null.png'},
-      EYEBROW: {src: 'img/null.png'},
-      EYE: {src: 'img/null.png'},
-      PUPIL: {src: 'img/null.png'},
-      HINDLEG: {src: 'img/null.png'},
-      HINDPAW: {src: 'img/null.png'},
-      FRONTLEG: {src: 'img/null.png'},
-      FRONTPAW: {src: 'img/null.png'},
-      
+      HINDLEGSHOULDER: {src: 'img/sprites/hero/walking/HindLegShoulder.png'},
+      HINDLEGLEG: {src: 'img/sprites/hero/walking/HindLegLeg.png'},
+      HINDLEGFOOT: {src: 'img/sprites/hero/walking/HindLegFoot.png'},
+      FRONTLEGSHOULDER: {src: 'img/sprites/hero/walking/FrontLegShoulder.png'},
+      FRONTLEGLEG: {src: 'img/sprites/hero/walking/FrontLegLeg.png'},
     };
     
     _.each(IMAGES, function(imgObj, imgKey) {
@@ -65,7 +62,7 @@ chihuahuaApp.service('hero', [
           perturb: function(t) {
             return {
               parentAnchorPoint: {
-                y: 10 * AnimationHelpers.computePhasePosition(t, 
+                y: 5 * AnimationHelpers.computePhasePosition(t, 
                     self.animspeed.walkingLegs, 0)
               }
             };
@@ -182,9 +179,7 @@ chihuahuaApp.service('hero', [
                           angle: -.2 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5)
                         };
                       },
-                    }),                  
-                  
-                  
+                    }),
                     new AnimationHelpers.Limb({
                       image: IMAGES.RIGHTEAR.image,
                       parentAnchorPoint: {x: 11, y: 24},
@@ -212,71 +207,118 @@ chihuahuaApp.service('hero', [
                           imageAnchorPoint: {x: 16, y: 2},
                           perturb: function(t) {
                             return {
-                              angle: -.2 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5)
+                              angle: -.1 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5)
                             };
                           },
                         })
                       ]
                     }),
-                    
-                    
                   ]
                 }),
               ]
             }),
-            
-            
-            
-            
-            
 
-            // Far hind leg.
+            // Near hind leg.
             new AnimationHelpers.Limb({
-              image: IMAGES.HINDLEG.image,
-              parentAnchorPoint: {x: 95, y: 120},
-              imageAnchorPoint: {x: 50, y: 10},
-              z: -1,
+              image: IMAGES.HINDLEGSHOULDER.image,
+              parentAnchorPoint: {x: 8, y: 35},
+              imageAnchorPoint: {x: 9, y: 8},
               perturb: function(t) {
                 return {
-                  angle: .5 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5)
+                  angle: .2 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .75)
                 };
               },
               
               children: [
                 new AnimationHelpers.Limb({
-                  image: IMAGES.HINDPAW.image,
-                  parentAnchorPoint: {x: 20, y: 115},
-                  imageAnchorPoint: {x: 15, y: 10},
+                  image: IMAGES.HINDLEGLEG.image,
+                  parentAnchorPoint: {x: 27, y: 24},
+                  imageAnchorPoint: {x: 22, y: 5},
                   perturb: function(t) {
                     return {
-                      angle: .3 * AnimationHelpers.computePhasePosition(t, 
-                          self.animspeed.walkingLegs, .75)
+                      angle: .4 * AnimationHelpers.computePhasePosition(t, 
+                          self.animspeed.walkingLegs, .5)
                     };
-                  }
+                  },
+                  children: [
+                    new AnimationHelpers.Limb({
+                      image: IMAGES.HINDLEGFOOT.image,
+                      parentAnchorPoint: {x: 5, y: 23},
+                      imageAnchorPoint: {x: 3, y: 2},
+                      perturb: function(t) {
+                        return {
+                          angle: .2 * AnimationHelpers.computePhasePosition(t, 
+                              self.animspeed.walkingLegs, .75)
+                        };
+                      },
+                    })
+                  ]
                 })
               ]
             }),
             
-            // Near hind leg.
+            // Far hind leg.
             new AnimationHelpers.Limb({
-              image: IMAGES.HINDLEG.image,
-              parentAnchorPoint: {x: 65, y: 130},
-              imageAnchorPoint: {x: 50, y: 10},
+              image: IMAGES.HINDLEGSHOULDER.image,
+              parentAnchorPoint: {x: 18, y: 33},
+              imageAnchorPoint: {x: 9, y: 8},
+              z: -1,
               perturb: function(t) {
                 return {
-                  angle: .5 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, 0)
+                  angle: .2 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .25)
                 };
               },
               
               children: [
                 new AnimationHelpers.Limb({
-                  image: IMAGES.HINDPAW.image,
-                  parentAnchorPoint: {x: 20, y: 115},
-                  imageAnchorPoint: {x: 15, y: 10},
+                  image: IMAGES.HINDLEGLEG.image,
+                  parentAnchorPoint: {x: 27, y: 24},
+                  imageAnchorPoint: {x: 22, y: 5},
                   perturb: function(t) {
                     return {
-                      angle: .3 * AnimationHelpers.computePhasePosition(t, 
-                          self.animspeed.walkingLegs, .25)
+                      angle: .4 * AnimationHelpers.computePhasePosition(t, 
+                          self.animspeed.walkingLegs, 0)
+                    };
+                  },
+                  children: [
+                    new AnimationHelpers.Limb({
+                      image: IMAGES.HINDLEGFOOT.image,
+                      parentAnchorPoint: {x: 5, y: 23},
+                      imageAnchorPoint: {x: 3, y: 2},
+                      perturb: function(t) {
+                        return {
+                          angle: .2 * AnimationHelpers.computePhasePosition(t, 
+                              self.animspeed.walkingLegs, .25)
+                        };
+                      },
+                    })
+                  ]
+                })
+              ]
+            }),
+
+            // Near front leg.
+            new AnimationHelpers.Limb({
+              image: IMAGES.FRONTLEGSHOULDER.image,
+              parentAnchorPoint: {x: 95, y: 50},
+              imageAnchorPoint: {x: 8, y: 4},
+              perturb: function(t) {
+                return {
+                  angle: .3 * 
+                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .25)
+                };
+              },
+              
+              children: [
+                new AnimationHelpers.Limb({
+                  image: IMAGES.FRONTLEGLEG.image,
+                  parentAnchorPoint: {x: 7, y: 13},
+                  imageAnchorPoint: {x: 5, y: 3},
+                  angle: -.4,
+                  perturb: function(t) {
+                    return {
+                      angle: -.6 * AnimationHelpers.computePhasePosition(t, 
+                          self.animspeed.walkingLegs, 0)
                     };
                   }
                 })
@@ -285,109 +327,44 @@ chihuahuaApp.service('hero', [
             
             // Far front leg.
             new AnimationHelpers.Limb({
-              image: IMAGES.FRONTLEG.image,
-              parentAnchorPoint: {x: 270, y: 140},
-              imageAnchorPoint: {x: 30, y: 20},
+              image: IMAGES.FRONTLEGSHOULDER.image,
+              parentAnchorPoint: {x: 105, y: 45},
+              imageAnchorPoint: {x: 8, y: 4},
               z: -1,
-              angle: -.3,
               perturb: function(t) {
                 return {
-                  angle: .6 * AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, 0)
+                  angle: .3 * 
+                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .75)
                 };
               },
               
               children: [
                 new AnimationHelpers.Limb({
-                  image: IMAGES.FRONTPAW.image,
-                  parentAnchorPoint: {x: 20, y: 105},
-                  imageAnchorPoint: {x: 15, y: 10},
+                  image: IMAGES.FRONTLEGLEG.image,
+                  parentAnchorPoint: {x: 7, y: 13},
+                  imageAnchorPoint: {x: 5, y: 3},
+                  angle: -.4,
                   perturb: function(t) {
                     return {
-                      angle: .3 * AnimationHelpers.computePhasePosition(t, 
-                          self.animspeed.walkingLegs, .25)
+                      angle: -.6 * AnimationHelpers.computePhasePosition(t, 
+                          self.animspeed.walkingLegs, .5)
                     };
                   }
                 })
               ]
             }),
             
-            // Near front leg.
-            new AnimationHelpers.Limb({
-              image: IMAGES.FRONTLEG.image,
-              parentAnchorPoint: {x: 300, y: 155},
-              imageAnchorPoint: {x: 30, y: 20},
-              angle: -.3,
-              perturb: function(t) {
-                return {
-                  angle: .6 * 
-                      AnimationHelpers.computePhasePosition(t, self.animspeed.walkingLegs, .5)
-                };
-              },
-              
-              children: [
-                new AnimationHelpers.Limb({
-                  image: IMAGES.FRONTPAW.image,
-                  parentAnchorPoint: {x: 20, y: 105},
-                  imageAnchorPoint: {x: 15, y: 10},
-                  perturb: function(t) {
-                    return {
-                      angle: .3 * AnimationHelpers.computePhasePosition(t, 
-                          self.animspeed.walkingLegs, .75)
-                    };
-                  }
-                })
-              ]
-            }),
-            
-            // Neck and head.
-            new AnimationHelpers.Limb({
-
-              
-              children: [
-                new AnimationHelpers.Limb({
-                  image: IMAGES.EYEBROW.image,
-                  parentAnchorPoint: {x: 100, y: 100},
-                  z: 5,
-                  perturb: function(t) {
-                    return {
-                      parentAnchorPoint: {
-                        y: 2 * AnimationHelpers.computePhasePosition(t, 
-                              self.animspeed.walkingLegs, .25)
-                      }
-                    };
-                  },
-                }),
-                
-                new AnimationHelpers.Limb({
-                  image: IMAGES.EYE.image,
-                  parentAnchorPoint: {x: 110, y: 110},
-                  children: [
-                    new AnimationHelpers.Limb({
-                      image: IMAGES.PUPIL.image,
-                      imageAnchorPoint: {x: 15, y: 15},
-                      parentAnchorPoint: {x: 25, y: 25},
-                      perturb: function(t) {
-                        return {
-                          angle: .2 * AnimationHelpers.computePhasePosition(t,
-                              self.animspeed.walkingLegs, 0),
-                        };
-                      },
-                    })
-                  ]
-                }),
-              ]
-            }),
           ]
         }),
         
         // Behind everything, the shadow.
         new AnimationHelpers.Limb({
-          parentAnchorPoint: {x: 0, y: 50},
+          parentAnchorPoint: {x: 10, y: 50},
           z: -10,
           customDraw: function(drawingContext, t) {
-            drawingContext.scale(1, .15);
+            drawingContext.scale(1, .10);
             drawingContext.beginPath();
-            drawingContext.arc(0, 0, 80, 0, 2 * Math.PI, false);
+            drawingContext.arc(0, 0, 90, 0, 2 * Math.PI, false);
             drawingContext.fillStyle = 'rgba(0,0,0, .5)';
             drawingContext.fill();
           },
@@ -434,7 +411,7 @@ chihuahuaApp.service('hero', [
       return;
     };
     
-    var animSitting = animWalking.clone(); //.unperturb();
+    var animSitting = animWalking.clone().unperturb();
     
     var renderSitting = function(drawingContext, time) {
       drawingContext.save();
